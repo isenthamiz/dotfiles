@@ -37,6 +37,9 @@ local function get_next_wallpaper()
   return nil
 end
 
+-- FPS Settings
+config.max_fps = 120
+
 -- Text and Font Configuration
 config.font = wezterm.font('MesloLGS Nerd Font Mono')
 config.font_size = 19.0
