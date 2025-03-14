@@ -51,6 +51,7 @@ vim.o.linebreak = true
 vim.o.wrap = false
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.o.guicursor = "n-v-c:block,i-ci-ve:ver25,r-cr-o:hor20"
+vim.o.scrolloff = 0
 
 lvim.builtin.telescope.defaults.path_display = {
   shorten = 4,

@@ -37,7 +37,10 @@ local function get_next_wallpaper()
   return nil
 end
 
--- FPS Settings
+-- Reload Configuration
+config.automatically_reload_config = true
+
+-- FPS settings
 config.max_fps = 120
 
 -- Text and Font Configuration
@@ -54,7 +57,7 @@ config.default_cursor_style = 'BlinkingUnderline'
 
 -- ColorScheme Configurations
 config.color_scheme_dirs = { wezterm.home_dir .. '/.config/wezterm/color-schemes' }
-config.color_scheme = 'nightfox'
+config.color_scheme = 'Espresso'
 
 -- Background Configurations
 config.background = {
@@ -79,7 +82,7 @@ config.background = {
 config.window_padding = {
   left = '1cell',
   right = '1cell',
-  top = '1cell',
+  top = '0.5cell',
   bottom = '0cell'
 }
 config.window_decorations = 'RESIZE'
@@ -118,7 +121,8 @@ config.keys = {
     key = 'z',
     mods = 'LEADER',
     action = action.ToggleFullScreen,
-  }
+  },
+  { key = "X", mods = "CTRL|SHIFT", action = wezterm.action.ActivateCopyMode },
 
 }
 

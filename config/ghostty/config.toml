@@ -1,0 +1,32 @@
+# font size cohfigurations
+font-family = "MesloLGS Nerd Font Mono Regular" 
+font-size = 18
+adjust-cell-height = 20%
+
+# cursor configurations
+cursor-style = block
+cursor-style-blink = true
+
+# window configurations
+# ghostty doesn't support background image?
+# background_image = "/Users/senthamiz/.config/ghostty/backgrounds/gandalf.jpg"
+background-opacity = 0.7
+background-blur = true
+window-height = 40
+window-width = 100
+macos-titlebar-style = hidden
+
+# terminal theme configurations
+theme = "ayu"
+
+# Key-Bindings
+# config reload
+keybind = ctrl+shift+r=reload_config
+# open quick terminal from anywhere when you press comd + `
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+# window management key bindings
+keybind = ctrl+shift+k=new_split:up
+keybind = ctrl+shift+j=new_split:down
+keybind = ctrl+shift+h=new_split:left
+keybind = ctrl+shift+l=new_split:right
+keybind = ctrl+shift+f=toggle_fullscreen
