@@ -10,7 +10,7 @@ AEROSPACE_BIN="/opt/homebrew/bin/aerospace"
 [[ -x "$AEROSPACE_BIN" ]] || AEROSPACE_BIN="/usr/local/bin/aerospace"
 
 # --- Bar ---
-sketchybar --bar height=37 color="$BAR_BG" border_width=0 padding_left=6 padding_right=6
+sketchybar --bar height=42 color="$BAR_BG" border_width=0 padding_left=6 padding_right=6
 
 # --- Defaults ---
 sketchybar --default \
@@ -22,17 +22,14 @@ sketchybar --default \
   padding_right=6 \
   background.drawing=off
 
-# =============================================================
-# LEFT: Apple (popped pill) + gap
-# =============================================================
+# LEFT: Apple Logo, Aerospace Workspaces, Aerospace Window Mode, Apps and Now Playing on Apple Music
+
+# 1. Apple Logo 
 sketchybar --add item apple left
 sketchybar --set apple \
   icon="$ICON_APPLE" \
   label.drawing=off \
   icon.font="$FONT:Bold:19.0" \
-  PILL_BG=0xff6f647e \
-  PILL_BG_ACTIVE=0xfff2c879 \
-  ACCENT=0xff1a1b26 \   # dark text on gold
   icon.color="$ACCENT_2" \
   padding_left=12 \
   padding_right=12 \
@@ -45,18 +42,26 @@ sketchybar --set apple \
 sketchybar --add item apple_gap left
 sketchybar --set apple_gap width=14 background.drawing=off icon="" label=""
 
-# =============================================================
-# LEFT: Workspaces as ID pills (created once)
-# =============================================================
+# 2. Aerospace Workspaces 
 for sid in $("$AEROSPACE_BIN" list-workspaces --all); do
   sketchybar --add item "space.$sid" left
   sketchybar --set "space.$sid" \
-    icon="" \
+    width=42 \
+    align=center \
+    icon="•" \
+    icon.font="$FONT:Bold:18.0" \
+    icon.color="0x00000000" \
+    icon.padding_right=0 \
     label="$sid" \
     label.drawing=on \
     label.font="$FONT:Bold:14.0" \
-    label.color="$FG" \
-    background.drawing=off \
+    label.color="$FAINT" \
+    label.padding_left=10 \
+    label.padding_right=10 \
+    background.drawing=on \
+    background.color="$PILL_BG" \
+    background.corner_radius=9 \
+    background.height=22 \
     click_script="$AEROSPACE_BIN workspace $sid"
 done
 
@@ -64,13 +69,14 @@ done
 sketchybar --add item ws_gap left
 sketchybar --set ws_gap width=10 background.drawing=off icon="" label=""
 
-# Updater (invisible) refreshes workspaces
+# Aerospace Workspace Updater - Updating Styles based on Active Workspace
 sketchybar --add item aerospace_ws_updater left
 sketchybar --set aerospace_ws_updater \
   drawing=off \
   update_freq=1 \
   script="$PLUGIN_DIR/aerospace_ws_poll.sh"
 
+# Separator 
 sketchybar --add item ws_sep left
 sketchybar --set ws_sep \
   icon="" \
@@ -81,21 +87,44 @@ sketchybar --set ws_sep \
   padding_right=10 \
   background.drawing=off
 
-# Focused app name (left)
+# 3. Aerospace Window Mode
+sketchybar --add item winmode left
+sketchybar --set winmode \
+  icon="" \
+  label="…" \
+  label.font="$FONT:Bold:18.0" \
+  label.color="$FG" \
+  padding_left=6 \
+  padding_right=10 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/winmode.sh"
+
+# Speparator
+sketchybar --add item ws_sep_2 left
+sketchybar --set ws_sep_2 \
+  icon="" \
+  label=">" \
+  label.font="$FONT:Bold:16.0" \
+  label.color="$FG" \
+  padding_left=6 \
+  padding_right=10 \
+  background.drawing=off
+
+# 4. Focused App Information
+# Focused app name
 sketchybar --add item focused_app left
 sketchybar --set focused_app \
   icon="" \
   label="…" \
   label.drawing=on \
-  label.font="$FONT:Bold:14.0" \
+  label.font="$FONT:Bold:18.0" \
   label.color="$FG" \
   padding_left=6 \
   padding_right=12 \
   update_freq=1 \
   script="$PLUGIN_DIR/focused_app_name_poll.sh"
 
-
-# Focused app icon (left)
+# Focused app icon
 sketchybar --add item focused_app_icon left
 sketchybar --set focused_app_icon \
   icon="$ICON_QUESTION" \
@@ -107,68 +136,74 @@ sketchybar --set focused_app_icon \
   update_freq=1 \
   script="$PLUGIN_DIR/focused_app_poll.sh"
 
-# =============================================================
-# RIGHT: Wi-Fi, Battery, Date+Time (text)
-# =============================================================
-# =============================================================
-# RIGHT: Status capsule (caps + items inside)
-# =============================================================
-sketchybar --add item status_cap_l right
-sketchybar --set status_cap_l \
-  icon="" label="" \
-  width=6 \
-  background.drawing=on \
-  background.color="$PILL_BG" \
-  background.corner_radius=12 \
-  background.height=24
+# Separator
+sketchybar --add item ws_sep_3 left
+sketchybar --set ws_sep_3 \
+  icon="" \
+  label=">" \
+  label.font="$FONT:Bold:16.0" \
+  label.color="$FG" \
+  padding_left=6 \
+  padding_right=10 \
+  background.drawing=off
 
-# Small gap inside the capsule at the start (optional)
-sketchybar --add item status_inner_gap_l right
-sketchybar --set status_inner_gap_l width=6 background.drawing=off icon="" label=""
+# 5. Now Playing on Apple Music
+sketchybar --add item nowplaying left
+sketchybar --set nowplaying \
+  icon="" \
+  icon.color="$FG" \
+  icon.padding_right=8 \
+  label.drawing=on \
+  label.color="$FG" \
+  label.max_chars=280 \
+  label.font="Hack Nerd Font Mono:Bold:18.0" \
+  width=280 \
+  align=left \
+  padding_left=8 \
+  padding_right=8 \
+  update_freq=1 \
+  script="$PLUGIN_DIR/nowplaying_fade.sh"
 
+
+# RIGHT: Wi-Fi, Battery, Date+Time, Volume, Audio Out 
+
+# Mic, Camera Indicator
+#sketchybar --add item privacy right
+#sketchybar --set privacy \
+#  icon="󰍬" \
+#  label="" \
+#  label.drawing=off \
+#  icon.color="$ALERT" \
+#  padding_left=8 \
+#  padding_right=8 \
+#  update_freq=2 \
+#  script="$PLUGIN_DIR/privacy.sh"
+#
+
+# 1. Date Time
 sketchybar --add item datetime right
 sketchybar --set datetime \
   icon="" \
   label.drawing=on \
-  label.font="$FONT:Bold:12.0" \
+  label.font="$FONT:Bold:18.0" \
   padding_left=10 \
   padding_right=10 \
   update_freq=10 \
   script="$PLUGIN_DIR/datetime.sh"
 
-sketchybar --add item status_sep_1 right
-sketchybar --set status_sep_1 \
-  icon="" \
-  label="|" \
-  label.color="$FAINT" \
-  label.font="$FONT:Bold:12.0" \
-  padding_left=6 \
-  padding_right=6 \
-  background.drawing=off
-
-
+# 2. Battery
 sketchybar --add item battery right
 sketchybar --set battery \
   icon="" \
   icon.padding_right=5 \
   label="" \
-  lable.padding_left=2 \
+  label.font="$FONT:Bold:18.0" \
+  label.padding_left=2 \
   label.drawing=on \
   update_freq=30 \
   script="$PLUGIN_DIR/battery.sh"
 
-
-sketchybar --add item status_sep_1 right
-sketchybar --set status_sep_1 \
-  icon="" \
-  label="|" \
-  label.color="$FAINT" \
-  label.font="$FONT:Bold:12.0" \
-  padding_left=6 \
-  padding_right=6 \
-  background.drawing=off
-
-
+# 3. Wifi
 sketchybar --add item wifi right
 sketchybar --set wifi \
   icon="" \
@@ -178,17 +213,7 @@ sketchybar --set wifi \
   update_freq=10 \
   script="$PLUGIN_DIR/wifi.sh"
 
-sketchybar --add item status_sep_1 right
-sketchybar --set status_sep_1 \
-  icon="" \
-  label="|" \
-  label.color="$FAINT" \
-  label.font="$FONT:Bold:12.0" \
-  padding_left=6 \
-  padding_right=6 \
-  background.drawing=off
-
-
+# 4. Volume
 sketchybar --add item volume right
 sketchybar --set volume \
   icon="" \
@@ -196,55 +221,24 @@ sketchybar --set volume \
   label.padding_left=2 \
   label.drawing=on \
   label.color="$FG" \
+  label.font="$FONT:Bold:18.0" \
   icon.color="$FG" \
   update_freq=2 \
   script="$PLUGIN_DIR/volume.sh"
 
-# Separator before Now Playing (optional)
-sketchybar --add item status_sep_np right
-sketchybar --set status_sep_np \
-  icon="" \
-  label="|" \
-  label.color="$FAINT" \
-  label.font="$FONT:Bold:12.0" \
-  padding_left=6 \
-  padding_right=6 \
-  background.drawing=off
-
-# Now Playing (fixed width + marquee)
-sketchybar --add item nowplaying right
-sketchybar --set nowplaying \
-  icon="" \
+# 5. Audio Out
+sketchybar --add item audioout right
+sketchybar --set audioout \
+  icon="󰋋" \
   icon.color="$FG" \
   icon.padding_right=8 \
   label.drawing=on \
   label.color="$FG" \
-  label.max_chars=280 \
-  label.font="Hack Nerd Font Mono:Bold:12.0" \
-  width=280 \
-  align=left \
+  label.font="$FONT:Bold:18.0" \
   padding_left=8 \
   padding_right=8 \
-  update_freq=1 \
-  script="$PLUGIN_DIR/nowplaying_fade.sh"
-
-
-# Small gap inside the capsule at the end (optional)
-sketchybar --add item status_inner_gap_r right
-sketchybar --set status_inner_gap_r width=6 background.drawing=off icon="" label=""
-
-sketchybar --add item status_cap_r right
-sketchybar --set status_cap_r \
-  icon="" label="" \
-  width=6 \
-  background.drawing=on \
-  background.color="$PILL_BG" \
-  background.corner_radius=12 \
-  background.height=24
-
-# Outside gap after the capsule (optional)
-sketchybar --add item status_gap right
-sketchybar --set status_gap width=10 background.drawing=off icon="" label=""
+  update_freq=5 \
+  script="$PLUGIN_DIR/audio_out.sh"
 
 sketchybar --update
 

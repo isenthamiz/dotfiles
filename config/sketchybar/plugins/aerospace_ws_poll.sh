@@ -20,29 +20,78 @@ is_focused() {
 }
 
 for sid in $WORKSPACES; do
+
   count="$("$AEROSPACE_BIN" list-windows --workspace "$sid" 2>/dev/null | wc -l | tr -d ' ')"
-
-  if is_focused "$sid"; then
-    sketchybar --set "space.$sid" \
-      label.color="$FG" \
-      label.font="$FONT:Bold:18.0" \
-      background.drawing=on \
-      background.color="$PILL_BG_ACTIVE" \
-      background.corner_radius=12 \
-      background.height=26 \
-      label.padding_left=26 \
-      label.padding_right=26 
+  
+  if [[ "${count:-0}" -gt 0 ]]; then
+    OCC_COLOR="$DIM"      # occupied
   else
-    sketchybar --set "space.$sid" \
-      label.color="$FG" \
-      label.font="$FONT:Bold:14.0" \
-      background.drawing=off \
-      label.padding_left=12 \
-      label.padding_right=12
-
+    OCC_COLOR="0x00000000" # fully transparent (empty)
+  fi
+  
+  if is_focused "$sid"; then
+  # ACTIVE: always show label
+  sketchybar --set "space.$sid" \
+    label="$sid" \
+    label.drawing=on \
+    label.color="$ACCENT" \
+    label.font="$FONT:Bold:18.0" \
+    icon.color="0x00000000" \
+    background.drawing=on \
+    background.color="$PILL_BG_ACTIVE" \
+    background.corner_radius=14 \
+    background.height=26
+  else
+    if [[ "${count:-0}" -gt 0 ]]; then
+      # OCCUPIED (not active): show label
+      sketchybar --set "space.$sid" \
+        label="$sid" \
+        label.drawing=on \
+        label.color="$FAINT" \
+        label.font="$FONT:Bold:18.0" \
+        icon.color="0x00000000" \
+        background.drawing=on \
+        background.color="$PILL_BG" \
+        background.corner_radius=9 \
+        background.height=22
+    else
+      # EMPTY (not active): show dot only, hide label
+      sketchybar --set "space.$sid" \
+        label.drawing=off \
+        icon.color="$DIM" \
+        background.drawing=on \
+        background.color="$PILL_BG" \
+        background.corner_radius=9 \
+        background.height=22
+    fi
   fi
 
 
+
+#  if is_focused "$sid"; then
+#    sketchybar --set "space.$sid" \
+#      icon.color="$ACCENT" \
+#      label.color="$ACCENT" \
+#      label.font="$FONT:Bold:18.0" \
+#      label.padding_left=26 \
+#      label.padding_right=26 \
+#      background.drawing=on \
+#      background.color="$PILL_BG_ACTIVE" \
+#      background.corner_radius=14 \
+#      background.height=26
+#  else
+#    sketchybar --set "space.$sid" \
+#      icon.color="$OCC_COLOR" \
+#      label.color="$FAINT" \
+#      label.font="$FONT:Bold:14.0" \
+#      label.padding_left=12 \
+#      label.padding_right=12 \
+#      background.drawing=on \
+#      background.color="$PILL_BG" \
+#      background.corner_radius=9 \
+#      background.height=26
+#  fi
+#
 #  if is_focused "$sid"; then
 #    # Focused: accent label + brighter background
 #    sketchybar --set "space.$sid" \
