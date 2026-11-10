@@ -1,0 +1,41 @@
+# font size cohfigurations
+font-family = "MesloLGS Nerd Font Mono" 
+font-size = 18
+adjust-cell-height = 20%
+
+macos-option-as-alt = right
+
+# cursor configurations
+shell-integration-features = no-cursor
+cursor-color = red
+cursor-style = underline
+cursor-style-blink = true
+
+# window configurations
+background-image = "/Users/senthamiz/.config/ghostty/backgrounds/gandalf.jpg"
+background-image-opacity = 0.25
+background-image-fit = cover
+# background-opacity = 1
+# background-blur = true
+window-height = 40
+window-width = 100
+
+# Quick Terminal Configs
+quick-terminal-position = left
+quick-terminal-size = 25%
+
+# terminal theme configurations
+theme = Monokai Pro
+
+# Key-Bindings
+# config reload
+keybind = ctrl+shift+r=reload_config
+# open quick terminal from anywhere when you press comd + `
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+# window management key bindings
+keybind = ctrl+shift+k=new_split:up
+keybind = ctrl+shift+j=new_split:down
+keybind = ctrl+shift+h=new_split:left
+keybind = ctrl+shift+l=new_split:right
+keybind = ctrl+shift+f=toggle_fullscreen
+
