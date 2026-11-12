@@ -1,0 +1,4 @@
+interface:
+  display_name: "Implement Task"
+  short_description: "Implement in a worktree, validate, then open a PR"
+  default_prompt: "Use $implement-task to implement this task in an external worktree and get my validation before creating a PR."
