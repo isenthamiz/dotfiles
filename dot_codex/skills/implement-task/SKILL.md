@@ -37,7 +37,7 @@ Before coding, inspect active records for this repository and `git worktree list
 
 Determine the remote default branch from the remote's metadata; fetch its latest state. Use an explicitly requested alternative base when supplied. If the remote cannot be reached, report the blocker instead of silently using a stale base.
 
-Create a unique temporary parent with `mktemp -d`, then add a Git worktree in a child directory on a unique `codex/<task-slug>-<unique-id>` branch from the resolved base. Resolve paths and verify the worktree is outside the original repository and its Git directory, even if the temporary-directory environment variable points inside the repository. Choose another OS temporary location if necessary.
+Create the worktree root at `$HOME/.git-work-tree` and a unique task parent beneath it with `mktemp -d "$HOME/.git-work-tree/<task-slug>.XXXXXX"`. Add a Git worktree in its `worktree` child directory on a unique `codex/<task-slug>-<unique-id>` branch from the resolved base. Resolve paths and verify the worktree is outside the original repository and its Git directory. Obtain ordinary execution permissions if this location is restricted; if it cannot be used, ask the user for another location.
 
 Leave the user's current branch and files untouched. Run task commands with an explicit worktree working directory. Separate worktrees still share Git refs and repository metadata: avoid global Git configuration changes, force pushes, shared ref changes, and cleanup of other tasks. Use task-specific ports and output directories for simultaneous app runs when needed.
 
@@ -79,7 +79,7 @@ On push or PR failure, preserve the branch, record, and worktree, report the fai
 
 ## 6. Cleanup and recovery
 
-After successful PR creation, confirm the worktree has no staged, unstaged, or untracked files, the task commit is reachable from the pushed remote branch, and the PR points to that branch/commit. Remove only this task's worktree with normal `git worktree remove`; never force removal. Remove its temporary parent only if empty. Preserve local and remote branches and the persistent record.
+After successful PR creation, confirm the worktree has no staged, unstaged, or untracked files, the task commit is reachable from the pushed remote branch, and the PR points to that branch/commit. Remove only this task's worktree with normal `git worktree remove`; never force removal. Remove its task parent only if empty; retain the shared `$HOME/.git-work-tree` root. Preserve local and remote branches and the persistent record.
 
 Ignored artifacts can be discarded only when they are known reproducible task build outputs. Preserve unknown files, running user test sessions, and valuable local data; report cleanup as pending when needed. Record completion and cleanup status separately so a cleanup failure cannot trigger duplicate publication.
 
